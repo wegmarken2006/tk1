@@ -22,8 +22,8 @@ class Application(tk.Frame):
                               command=root.destroy)
         self.quit.pack(side="bottom")
 
-    def say_hello(self):
-        print("hello there, everyone!")
+    def say_hi(self):
+        print("hi there, everyone!")
 
 tk.Label()
 root = tk.Tk()
