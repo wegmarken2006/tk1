@@ -25,6 +25,10 @@ class Application(tk.Frame):
     def say_hi(self):
         print("hi there, everyone!")
 
+    def say_hello(self):
+            print("hello there, everyone!")
+
+
 tk.Label()
 root = tk.Tk()
 app = Application(master=root)
