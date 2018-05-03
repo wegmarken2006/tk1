@@ -43,7 +43,7 @@ def res_b_clicked():
 res_b = tk.Button(mainframe, text="Result", bg="white", fg="blue", command=res_b_clicked)
 res_b.grid(column=col, row=row)
 
-
+#comment
 root.mainloop()
 
 
