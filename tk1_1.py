@@ -8,13 +8,24 @@ import tkinter as tk
 import my_date_picker as mdp
 from datetime import datetime
 import math
+import configparser
 
 def days_between(d1, d2):
     d1 = datetime.strptime(d1, "%Y-%m-%d")
     d2 = datetime.strptime(d2, "%Y-%m-%d")
     return abs((d2 - d1).days)
 
-
+class Config:
+    def __init__(self):
+        filename = "config.ini"
+        config = configparser.ConfigParser()
+        rd = config.read(filename)
+        if rd == []:
+            config["DEFAULT"] = {"IniAmount": "1000", "MonthlyIncome": "100"}
+            with open(filename, 'w') as configfile:
+                config.write(configfile)
+        self.ini_amount = float(config["DEFAULT"]["IniAmount"])
+        self.monthly_income = float(config["DEFAULT"]["MonthlyIncome"])
 
 class MainGUI:
     def __init__(self, root):
@@ -52,16 +63,27 @@ class MainGUI:
 root = tk.Tk()
 m_gui = MainGUI(root)
 
+config = Config()
+today = datetime.today().strftime('%Y-%m-%d')
+
 start_amount = tk.DoubleVar()
-start_date = tk.StringVar()
+start_amount.set(config.ini_amount)
 m_gui.add_num_entry_field(row=1, col=1, var=start_amount, ltext="Start Amount")
+
+start_date = tk.StringVar()
+start_date.set(today)
 m_gui.add_date_field(row=2, col=1, var=start_date, ltext="Start Date")
+
 month_income = tk.DoubleVar()
-end_mi_date = tk.StringVar()
+month_income.set(config.monthly_income)
 m_gui.add_num_entry_field(row=3, col=1, var=month_income, ltext="Monthly Income")
+
+end_mi_date = tk.StringVar()
+end_mi_date.set(today)
 m_gui.add_date_field(row=4, col=1, var=end_mi_date, ltext="End In. Date")
 
 end_date = tk.StringVar()
+end_date.set(today)
 m_gui.add_date_field(row=5, col=1, var=end_date, ltext="End Date")
 res = tk.DoubleVar()
 def fres():
