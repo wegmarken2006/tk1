@@ -6,45 +6,73 @@ Created on Mon Apr 16 12:00:54 2018
 """
 import tkinter as tk
 import my_date_picker as mdp
+from datetime import datetime
+import math
+
+def days_between(d1, d2):
+    d1 = datetime.strptime(d1, "%Y-%m-%d")
+    d2 = datetime.strptime(d2, "%Y-%m-%d")
+    return abs((d2 - d1).days)
+
+
+
+class MainGUI:
+    def __init__(self, root):
+        root = root
+        root.title("Fin")
+        root.geometry("640x480")
+
+        self.mainframe = tk.Frame(root)
+        self.mainframe.grid(column=0, row=0)
+        self.mainframe.columnconfigure(0, weight=1)
+        self.mainframe.rowconfigure(0, weight=1)
+
+    def add_date_field(self, row, col, var, ltext):
+        label = tk.Label(self.mainframe, text=ltext)
+        entry = tk.Entry(self.mainframe, textvariable=var)
+        btn = tk.Button(self.mainframe, text="Date", bg="white", fg="blue", command=lambda: mdp.MyDatePicker(entry))
+        label.grid(column=col, row=row)
+        entry.grid(column=col + 1, row=row)
+        btn.grid(column=col + 2, row=row)
+
+    def add_result_field(self, row, col, func, var):
+        btn = tk.Button(self.mainframe, text="Result", bg="white", fg="blue", command=func)
+        label = tk.Label(self.mainframe, textvariable=var)
+        btn.grid(column=col, row=row)
+        label.grid(column=col + 1, row=row)
+
+    def add_num_entry_field(self, row, col, var, ltext):
+        label = tk.Label(self.mainframe, text=ltext)
+        entry = tk.Entry(self.mainframe, textvariable=var)
+        label.grid(column=col, row=row)
+        entry.grid(column=col + 1, row=row)
+
 
 
 root = tk.Tk()
-root.title("Fin")
-root.geometry("320x240")
+m_gui = MainGUI(root)
 
-mainframe = tk.Frame(root)
-mainframe.grid(column=0, row=0)
-mainframe.columnconfigure(0, weight=1)
-mainframe.rowconfigure(0, weight=1)
+start_amount = tk.DoubleVar()
+start_date = tk.StringVar()
+m_gui.add_num_entry_field(row=1, col=1, var=start_amount, ltext="Start Amount")
+m_gui.add_date_field(row=2, col=1, var=start_date, ltext="Start Date")
+month_income = tk.DoubleVar()
+end_mi_date = tk.StringVar()
+m_gui.add_num_entry_field(row=3, col=1, var=month_income, ltext="Monthly Income")
+m_gui.add_date_field(row=4, col=1, var=end_mi_date, ltext="End In. Date")
 
+end_date = tk.StringVar()
+m_gui.add_date_field(row=5, col=1, var=end_date, ltext="End Date")
+res = tk.DoubleVar()
+def fres():
+    d1 = days_between(end_mi_date.get(), start_date.get())
+    to_add = math.floor(d1/30)*month_income.get()
+    res.set(start_amount.get() + to_add)
 
-start_l = tk.Label(mainframe, text="Start")
-start_e = tk.Entry(mainframe)
-startd_l = tk.Label(mainframe, text="Start Date")
-startd_e = tk.Entry(mainframe)
+m_gui.add_result_field(row=7, col=1, func=fres, var=res)
 
-def startd_b_clicked():
-    mdp.MyDatePicker(startd_e)
-
-startd_b = tk.Button(mainframe, text="Date", bg="white", fg="blue", command=startd_b_clicked)
-col = 1
-row = 1
-start_l.grid(column=col, row=row)
-start_e.grid(column=col+1, row=row)
-row = row + 1
-startd_l.grid(column=col, row=row)
-startd_e.grid(column=col+1, row=row)
-startd_b.grid(column=col+2, row=row)
-row = row + 1
-
-def res_b_clicked():
-    print(startd_e.get())
-
-res_b = tk.Button(mainframe, text="Result", bg="white", fg="blue", command=res_b_clicked)
-res_b.grid(column=col, row=row)
-
-#comment
 root.mainloop()
+
 
 
 
